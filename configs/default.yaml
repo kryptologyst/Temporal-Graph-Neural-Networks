@@ -1,0 +1,101 @@
+# Default configuration for temporal graph neural networks
+
+# Model configuration
+model:
+  name: "evolve_gcn"  # evolve_gcn, tgat, tgn, dyrep, ensemble
+  in_channels: 10
+  out_channels: 2
+  hidden_channels: 64
+  num_layers: 2
+  dropout: 0.1
+  
+  # Model-specific parameters
+  evolve_gcn:
+    variant: "H"  # H or O
+    
+  tgat:
+    num_heads: 4
+    time_dim: 16
+    
+  tgn:
+    time_dim: 16
+    
+  dyrep:
+    time_dim: 16
+    
+  ensemble:
+    ensemble_size: 3
+
+# Training configuration
+training:
+  num_epochs: 100
+  batch_size: 1
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  optimizer: "adam"  # adam, adamw, sgd
+  scheduler: "plateau"  # step, cosine, plateau, none
+  patience: 10
+  min_delta: 0.001
+  early_stop_mode: "max"  # max for accuracy, min for loss
+  grad_clip: 1.0
+  
+  # Scheduler parameters
+  step_size: 30
+  gamma: 0.1
+  T_max: 100
+  scheduler_patience: 10
+  scheduler_factor: 0.5
+  
+  # SGD parameters
+  momentum: 0.9
+
+# Data configuration
+data:
+  name: "elliptic"  # elliptic, synthetic
+  root: "data"
+  normalize_features: true
+  add_time_features: true
+  time_window: 10
+  
+  # Data split ratios
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  
+  # Synthetic data parameters
+  synthetic:
+    num_nodes: 1000
+    num_edges: 5000
+    num_features: 10
+    num_classes: 2
+    num_timesteps: 50
+
+# Evaluation configuration
+evaluation:
+  task: "node_classification"  # node_classification, link_prediction, graph_classification
+  num_classes: 2
+  metrics: ["accuracy", "f1", "auroc", "avg_precision"]
+  save_predictions: true
+  save_embeddings: true
+
+# Logging configuration
+logging:
+  log_dir: "logs"
+  tensorboard: true
+  wandb: false
+  wandb_project: "temporal_gnn"
+  log_interval: 10
+
+# System configuration
+system:
+  seed: 42
+  device: "auto"  # auto, cuda, mps, cpu
+  num_workers: 4
+  pin_memory: true
+  
+# Paths
+paths:
+  data_dir: "data"
+  checkpoint_dir: "checkpoints"
+  assets_dir: "assets"
+  demo_dir: "demo"

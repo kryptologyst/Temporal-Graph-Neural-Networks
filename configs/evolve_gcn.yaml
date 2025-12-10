@@ -1,0 +1,48 @@
+# Configuration for EvolveGCN model
+
+# Model configuration
+model:
+  name: "evolve_gcn"
+  in_channels: 10
+  out_channels: 2
+  hidden_channels: 64
+  num_layers: 2
+  dropout: 0.1
+  variant: "H"  # H or O
+
+# Training configuration
+training:
+  num_epochs: 50
+  batch_size: 1
+  learning_rate: 0.01
+  weight_decay: 0.0001
+  optimizer: "adam"
+  scheduler: "step"
+  patience: 10
+  min_delta: 0.001
+  early_stop_mode: "max"
+  grad_clip: 1.0
+  step_size: 20
+  gamma: 0.5
+
+# Data configuration
+data:
+  name: "elliptic"
+  root: "data"
+  normalize_features: true
+  add_time_features: false
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+
+# Evaluation configuration
+evaluation:
+  task: "node_classification"
+  num_classes: 2
+  metrics: ["accuracy", "f1", "auroc", "avg_precision"]
+
+# System configuration
+system:
+  seed: 42
+  device: "auto"
+  num_workers: 4
